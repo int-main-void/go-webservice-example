@@ -8,9 +8,10 @@ package main
 import (
 	"log"
 	"os"
+	"strconv"
 	"time"
 
-	"greatsagemonkey.com/example-app/config"
+	"github.com/sirupsen/logrus"
 	"greatsagemonkey.com/example-app/server"
 )
 
@@ -19,9 +20,9 @@ const HEARTBEAT_SLEEP_INTERVAL = 30000 * time.Millisecond
 const CONFIG_FILENAME_KEY = "CONFIG_FILENAME"
 const RUNTIME_STAGE_KEY = "RUNTIME_STAGE"
 
-const LISTENING_PORT_KEY = "ListeningPort"
-const SERVER_CERT_FILE_KEY = "ServerCertFile"
-const SERVER_KEY_FILE_KEY = "ServerKeyFile"
+const LISTENING_PORT_KEY = "LISTENING_PORT"
+const SERVER_CERT_FILE_KEY = "SERVER_CERT_FILE"
+const SERVER_KEY_FILE_KEY = "SERVER_KEY_FILE"
 
 const CONFIG_NAME = "example-webservice"
 const VERSION = "v1"
@@ -32,27 +33,30 @@ func main() {
 	// set up logging
 	log.SetFlags(log.LstdFlags | log.Lshortfile | log.LUTC)
 
-	// set up configuration
-
-	configFilename := os.Getenv(CONFIG_FILENAME_KEY)
-	runtimeStage := os.Getenv(RUNTIME_STAGE_KEY)
-
-	conf, error := config.NewConfig(configFilename, CONFIG_NAME, VERSION, runtimeStage)
-	if error != nil {
-		log.Println("FATAL: error setting up configuration: ", error)
-		os.Exit(1)
+	logrus.SetFormatter(&logrus.JSONFormatter{})
+	logrus.SetOutput(os.Stdout)
+	if os.Getenv("LOG_LEVEL") == "DEBUG" {
+		logrus.SetLevel(logrus.DebugLevel)
+	} else {
+		logrus.SetLevel(logrus.InfoLevel)
 	}
-	log.Println(conf)
+
+	logrus.Error("HEELLLO FROM LOGRUS")
 
 	// run main program
-	listeningPort := conf[LISTENING_PORT_KEY]
-	serverCert := conf[SERVER_CERT_FILE_KEY]
-	serverKey := conf[SERVER_KEY_FILE_KEY]
+	listeningPort := os.Getenv(LISTENING_PORT_KEY)
+	_, err := strconv.Atoi(listeningPort)
+	if err != nil {
+		logrus.Error("invalid listening port: ", listeningPort)
+		os.Exit(1)
+	}
+	serverCert := os.Getenv(SERVER_CERT_FILE_KEY)
+	serverKey := os.Getenv(SERVER_KEY_FILE_KEY)
 	server.StartServer(listeningPort, serverCert, serverKey)
 
 	// enter heartbeat loop
 	for true {
-		log.Println("system has been running for ", time.Since(startTime))
+		logrus.Info("system has been running for ", time.Since(startTime))
 		time.Sleep(HEARTBEAT_SLEEP_INTERVAL)
 	}
 }

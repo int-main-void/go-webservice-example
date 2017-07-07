@@ -47,4 +47,4 @@ bin-local: src/vendor test
 	go install $(MAIN_PKG)
 
 run-local: bin-local
-	CONFIG_FILENAME="conf/example-webservice.conf" RUNTIME_STAGE="dev" $(BIN_NAME)
+	tools/run-local.sh
