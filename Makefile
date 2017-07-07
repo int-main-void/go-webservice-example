@@ -5,6 +5,7 @@
 
 all: image
 IMAGE_DIR=image
+DOCKER_NAMESPACE=mwngsm
 PROJECT_NAME=example-project
 VERSION=dev-latest
 
@@ -37,10 +38,9 @@ image: bin,pkg
 	mkdir -p $(IMAGE_DIR)/root
 	cp conf/Dockerfile $(IMAGE_DIR)
 	cp -a $(IMAGE_FILESET) $(IMAGE_DIR)/root
-	docker build -t $(PROJECT_NAME):$(VERSION) $(IMAGE_DIR)
+	docker build -t $(DOCKER_NAMESPACE)/$(PROJECT_NAME):$(VERSION) $(IMAGE_DIR)
 
 run: image
-	#docker run -it -v /opt/app/example-webservice/ssl:/opt/app/ssl -v /opt/app/example-webservice/log:/opt/app/log -e CONFIG_FILENAME="conf/example-webservice.conf" -e RUNTIME_STAGE="dev" $(PROJECT_NAME):$(VERSION)
 	docker-compose -f conf/docker-compose.yml up
 
 bin-local: src/vendor test
