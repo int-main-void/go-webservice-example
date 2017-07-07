@@ -37,6 +37,10 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("hello, cowboy"))
 }
 
+func helloPostHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("hello, cowboy poster"))
+}
+
 func widgetsHandler(resp http.ResponseWriter, req *http.Request) {
 	dbclient, err := db.GetAppDb()
 	if err != nil {

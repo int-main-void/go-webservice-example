@@ -41,8 +41,6 @@ func main() {
 		logrus.SetLevel(logrus.InfoLevel)
 	}
 
-	logrus.Error("HEELLLO FROM LOGRUS")
-
 	// run main program
 	listeningPort := os.Getenv(LISTENING_PORT_KEY)
 	_, err := strconv.Atoi(listeningPort)
@@ -52,7 +50,7 @@ func main() {
 	}
 	serverCert := os.Getenv(SERVER_CERT_FILE_KEY)
 	serverKey := os.Getenv(SERVER_KEY_FILE_KEY)
-	server.StartServer(listeningPort, serverCert, serverKey)
+	go server.StartServer(listeningPort, serverCert, serverKey)
 
 	// enter heartbeat loop
 	for true {
