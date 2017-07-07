@@ -1,10 +1,12 @@
 hash: e1159d6ca416bb353043473ea090a9d55f52581a8b73bace088486fafcdcb5c7
-updated: 2017-07-06T18:07:07.597491935-07:00
+updated: 2017-07-07T06:52:25.613048186-07:00
 imports:
 - name: github.com/gorilla/context
   version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
 - name: github.com/gorilla/mux
   version: bcd8bc72b08df0f70df986b97f95590779502d31
+- name: github.com/gorilla/websocket
+  version: 3ab3a8b8831546bd18fd182c20687ca853b2bb13
 - name: github.com/sirupsen/logrus
   version: 5e5dc898656f695e2a086b8e12559febbfc01562
 - name: github.com/urfave/negroni
