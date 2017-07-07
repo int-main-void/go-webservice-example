@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
 	"github.com/urfave/negroni"
 	"greatsagemonkey.com/example-app/config"
 )
@@ -32,14 +33,17 @@ func hello(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("hello, cowboy"))
 }
 
-func notFound(w http.ResponseWriter, r *http.Request) {
-	log.Println("request for invalid endpoint: ", r.URL.String())
+func notFound(resp http.ResponseWriter, req *http.Request) {
+	logrus.Println("request for invalid endpoint: ", req.URL.String())
+	http.Error(resp, "go fish", http.StatusNotFound)
 }
 
-func MyMiddleware(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
-	// do some stuff before
-	next(rw, r)
-	// do some stuff after
+func MyAuthMiddleware(resp http.ResponseWriter, req *http.Request, next http.HandlerFunc) {
+	if req.Header.Get("IMPORTANTSTUFF") == "" {
+		http.Error(resp, "you can't do that on television", http.StatusUnauthorized)
+		return
+	}
+	next(resp, req)
 }
 
 func setupRoutesAndServe(listeningPort string, serverCert string, serverKey string) error {
@@ -51,7 +55,7 @@ func setupRoutesAndServe(listeningPort string, serverCert string, serverKey stri
 	http.Handle("/", router)
 
 	n := negroni.Classic()
-	n.Use(negroni.HandlerFunc(MyMiddleware))
+	n.Use(negroni.HandlerFunc(MyAuthMiddleware))
 	n.UseHandler(router)
 
 	//return http.ListenAndServeTLS(":" + listeningPort, serverCert, serverKey, nil)

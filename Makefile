@@ -40,7 +40,8 @@ image: bin,pkg
 	docker build -t $(PROJECT_NAME):$(VERSION) $(IMAGE_DIR)
 
 run: image
-	docker run -it -v /opt/app/example-webservice/ssl:/opt/app/ssl -v /opt/app/example-webservice/log:/opt/app/log -e CONFIG_FILENAME="conf/example-webservice.conf" -e RUNTIME_STAGE="dev" $(PROJECT_NAME):$(VERSION)
+	#docker run -it -v /opt/app/example-webservice/ssl:/opt/app/ssl -v /opt/app/example-webservice/log:/opt/app/log -e CONFIG_FILENAME="conf/example-webservice.conf" -e RUNTIME_STAGE="dev" $(PROJECT_NAME):$(VERSION)
+	docker-compose -f conf/docker-compose.yml up
 
 bin-local: src/vendor test
 	go install $(MAIN_PKG)

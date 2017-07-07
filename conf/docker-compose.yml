@@ -11,6 +11,6 @@ services:
       - RUNTIME_STAGE=dev
       - CONFIG_FILENAME=/opt/app/conf/example-webservice.conf
     deploy:
-      restart:
+      restart_policy:
         condition: any
         delay: 1s
