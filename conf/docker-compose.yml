@@ -1,0 +1,16 @@
+#
+# docker-compose.yml for the example-webservice project
+#
+version: '3'
+services:
+  webservice:
+    image: mwngsm/example-project:dev-latest
+    ports:
+     - "7676:7676"
+    environment:
+      - RUNTIME_STAGE=dev
+      - CONFIG_FILENAME=/opt/app/conf/example-webservice.conf
+    deploy:
+      restart:
+        condition: any
+        delay: 1s

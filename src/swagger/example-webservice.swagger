@@ -1,0 +1,45 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Swagger Example Webservice",
+        "description": ""
+    },
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/example-webservice/v1/hello": {
+            "get" : {
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema" : {
+                        }
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "schema": {
+                        }
+                    }
+                }
+            }
+        },
+        "/example-webservice/v1/goodbye": {
+        }
+    },
+    "definitions": {
+        "thingy": {
+            "title": "",
+            "type": "object",
+            "required": [
+            ],
+            "properties": {
+            }
+        }
+    }
+}
